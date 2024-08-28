@@ -1,0 +1,102 @@
+#!/bin/sh
+
+#################################################################################
+#
+#   Lynis
+# ------------------
+#
+# Copyright 2007-2013, Michael Boelen
+# Copyright 2007-2021, CISOfy
+#
+# Website  : https://cisofy.com
+# Blog     : http://linux-audit.com
+# GitHub   : https://github.com/CISOfy/lynis
+#
+# Lynis comes with ABSOLUTELY NO WARRANTY. This is free software, and you are
+# welcome to redistribute it under the terms of the GNU General Public License.
+# See LICENSE file for usage of this software.
+#
+#################################################################################
+#
+# Category: Boot and services
+#
+#################################################################################
+#
+    InsertSection "PRIVLYINIS"
+#
+#################################################################################
+#
+#    BOOT_LOADER="unknown"
+#    BOOT_LOADER_FOUND=0
+#    BOOT_LOADER_SEARCHED=0
+#    GRUB_VERSION=0
+#    if [ -z "${SERVICE_MANAGER}" ]; then
+#        SERVICE_MANAGER="unknown"
+#    fi
+#
+#################################################################################
+#
+    # Test        : CUST-0040
+    # Description : Our second test, with a prerequisite test
+
+    # First check if OPENSSLBINARY is known as a prerequisite for this test
+    # ! means "not". So if the binary is known, the prerequisite is matched. Otherwise we set it to NO and define a reason why we skipped this test
+
+    if [ ! "${OPENSSLBINARY}" = "" ]; then PREQS_MET="YES"; else PREQS_MET="NO"; SKIPREASON="No OpenSSL binary found"; fi
+    Register --test-no CUST-0040 --preqs-met ${PREQS_MET} --skip-reason "${SKIPREASON}" --weight M --network NO --category security --description "Description of custom test"
+    if [ ${SKIPTEST} -eq 0 ]; then
+        # Set variable to zero, to indicate that we have no problems found (yet)
+        FOUNDPROBLEM=0
+        DIR="/my/path"
+        LogText "Test: we are going to check if we can find a particular directory (${DIR})"
+        # Check if a directory exists
+        if DirectoryExists ${DIR}; then
+            LogText "Result: log entry for easier debugging or additional information"
+        else
+            FOUNDPROBLEM=1
+            LogText "Result: directory ${DIR} was not found!"
+            ReportWarning "${TEST_NO}" "This is a test warning line" "${DIR}" "text:Create directory ${DIR}"
+        fi
+
+        if [ ${FOUNDPROBLEM} -eq 0 ]; then
+            Display --indent 2 --text "- Checking if everything is OK..." --result "${STATUS_OK}" --color GREEN
+        else
+            Display --indent 2 --text "- Checking if everything is OK..." --result "${STATUS_WARNING}" --color RED
+            ReportSuggestion "${TEST_NO}" "This is a suggestion"
+        fi
+    fi
+#
+#################################################################################
+#
+
+# Test        : PRIV-0001
+# Description : Check for Dirty Pipe vulnerability (CVE-2022-0847)
+
+# Check if the kernel version is vulnerable
+VULNERABLE_KERNEL="5.8"
+KERNEL_VERSION=$(uname -r)
+
+if [[ "$KERNEL_VERSION" == "$VULNERABLE_KERNEL" ]]; then PREQS_MET="YES"; else PREQS_MET="NO"; fi
+Register --test-no PRIV-0001 --preqs-met ${PREQS_MET} --weight H --network NO --description "Check for Dirty Pipe vulnerability (CVE-2022-0847)"
+
+if [ ${SKIPTEST} -eq 0 ]; then
+    FOUND=0
+    LogText "Test: checking for Dirty Pipe vulnerability"
+    if [ "${PREQS_MET}" == "YES" ]; then
+        Display --indent 4 --text "- Kernel version is vulnerable" --result WARNING --color RED
+        LogText "Result: The system is vulnerable to Dirty Pipe (CVE-2022-0847)"
+        ReportWarning ${TEST_NO} "The system is vulnerable to Dirty Pipe (CVE-2022-0847)"
+    else
+        Display --indent 4 --text "- Kernel version is not vulnerable" --result OK --color GREEN
+        LogText "Result: The system is not vulnerable to Dirty Pipe (CVE-2022-0847)"
+    fi
+fi
+
+#################################################################################
+
+# Wait for keypress (unless --quick is being used)
+WaitForKeyPress
+
+#
+#================================================================================
+# Lynis - Security Auditing and System Hardening for Linux and UNIX - https://cisofy.com
