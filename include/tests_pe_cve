@@ -26,16 +26,7 @@
 #
 #################################################################################
 #
-#    BOOT_LOADER="unknown"
-#    BOOT_LOADER_FOUND=0
-#    BOOT_LOADER_SEARCHED=0
-#    GRUB_VERSION=0
-#    if [ -z "${SERVICE_MANAGER}" ]; then
-#        SERVICE_MANAGER="unknown"
-#    fi
-#################################################################################
-#
-
+# Register the test with Lynis
 # Test        : CVE-2022-0847
 # Description : Check for Dirty Pipe vulnerability (CVE-2022-0847)
 Register --test-no CVE-2022-0847 --weight L --network NO --category security --description "Check for privilege escalation vulnerability Dirty Pipe"
@@ -43,19 +34,56 @@ Register --test-no CVE-2022-0847 --weight L --network NO --category security --d
 # Check if the test should be skipped
 if [ "${SKIPTEST}" -eq 0 ]; then
 
-    # Check if the kernel version is vulnerable to CVE-2022-0847
-    VULNERABLE_KERNEL="5.8"
-    KERNEL_VERSION=$(uname -r)
-    if [ "$KERNEL_VERSION" = "$VULNERABLE_KERNEL" ]; then    
+    # Function to check if a command exists
+    command_exists() {
+        command -v "$1" >/dev/null 2>&1
+    }
+
+    # Check if 'uname' command exists
+    if ! command_exists uname; then
+        Display --indent 4 --text "- CVE-2022-0847" --result ERROR --color YELLOW
+        LogText "Result: 'uname' command not found. Please ensure you have the necessary tools installed."
+        exit 1
+    fi
+
+    # Get the installed kernel version
+    kernel_version=$(uname -r | cut -d '-' -f 1)
+    LogText "Installed kernel version: $kernel_version"
+
+    # Vulnerable kernel version range for CVE-2022-0847 (Dirty Pipe)
+    vulnerable_min_version="5.8.0"
+    vulnerable_max_version="5.16.10"
+
+    # Simplified Compare function for version strings
+    compare_versions() {
+        ver1=$(printf "%03d%03d%03d" $(echo "$1" | tr '.' ' '))
+        ver2=$(printf "%03d%03d%03d" $(echo "$2" | tr '.' ' '))
+        
+        if [ "$ver1" -lt "$ver2" ]; then
+            return 1   # version1 < version2
+        elif [ "$ver1" -gt "$ver2" ]; then
+            return 2   # version1 > version2
+        else
+            return 0   # version1 == version2
+        fi
+    }
+
+    # Check if the installed kernel version is vulnerable
+    compare_versions "$kernel_version" "$vulnerable_min_version"
+    min_compare=$?
+
+    compare_versions "$kernel_version" "$vulnerable_max_version"
+    max_compare=$?
+
+    if [ $min_compare -eq 2 ] && [ $max_compare -eq 1 ]; then
         Display --indent 4 --text "- CVE-2022-0847" --result WARNING --color RED
         LogText "Result: The system is vulnerable to Dirty Pipe (CVE-2022-0847)"
         ReportWarning "CVE-2022-0847" "The system is vulnerable to Dirty Pipe (CVE-2022-0847)"
     else
-        Display --indent 4 --text "- CVE-2022-0847 " --result OK --color GREEN
+        Display --indent 4 --text "- CVE-2022-0847" --result OK --color GREEN
         LogText "Result: The system is not vulnerable to Dirty Pipe (CVE-2022-0847)"
     fi
 fi
-
 
 #################################################################################
 
