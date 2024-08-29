@@ -33,26 +33,25 @@
 #    if [ -z "${SERVICE_MANAGER}" ]; then
 #        SERVICE_MANAGER="unknown"
 #    fi
-#
 #################################################################################
 #
 
 # Test        : CVE-2022-0847
 # Description : Check for Dirty Pipe vulnerability (CVE-2022-0847)
-Register --test-no CVE-2022-0847 --weight L --network NO --category security --description "Check for Dirty Pipe vulnerability (CVE-2022-0847)"
+Register --test-no CVE-2022-0847 --weight L --network NO --category security --description "Check for privilege escalation vulnerability Dirty Pipe"
 
 # Check if the test should be skipped
 if [ "${SKIPTEST}" -eq 0 ]; then
 
-    # Check if the kernel version is vulnerable
+    # Check if the kernel version is vulnerable to CVE-2022-0847
     VULNERABLE_KERNEL="5.8"
     KERNEL_VERSION=$(uname -r)
     if [ "$KERNEL_VERSION" = "$VULNERABLE_KERNEL" ]; then    
-        Display --indent 4 --text "- Kernel version is vulnerable" --result WARNING --color RED
+        Display --indent 4 --text "- CVE-2022-0847" --result WARNING --color RED
         LogText "Result: The system is vulnerable to Dirty Pipe (CVE-2022-0847)"
         ReportWarning "CVE-2022-0847" "The system is vulnerable to Dirty Pipe (CVE-2022-0847)"
     else
-        Display --indent 4 --text "- Kernel version is not vulnerable" --result OK --color GREEN
+        Display --indent 4 --text "- CVE-2022-0847 " --result OK --color GREEN
         LogText "Result: The system is not vulnerable to Dirty Pipe (CVE-2022-0847)"
     fi
 fi

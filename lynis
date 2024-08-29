@@ -1023,7 +1023,7 @@ ${NORMAL}
                            mail_messaging firewalls webservers ssh snmp databases ldap php squid logging \
                            insecure_services banners scheduling accounting time crypto virtualization containers \
                            mac_frameworks file_integrity tooling malware file_permissions homedirs \
-                           kernel_hardening hardening"
+                           kernel_hardening hardening pe_cve"
         else
             INCLUDE_TESTS="${TEST_GROUP_TO_CHECK}"
             LogText "Info: only performing tests from groups: ${TEST_GROUP_TO_CHECK}"

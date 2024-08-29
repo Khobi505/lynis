@@ -446,4 +446,5 @@ TOOL-5190:test:security:tooling::Check presence of available IDS/IPS tooling:
 USB-1000:test:security:storage:Linux:Check if USB storage is disabled:
 USB-2000:test:security:storage:Linux:Check USB authorizations:
 USB-3000:test:security:storage:Linux:Check for presence of USBGuard:
+CVE-2022-0847:test:security:pe_cve::Check for privilege escalation vulnerability Dirty Pipe:
 # EOF
