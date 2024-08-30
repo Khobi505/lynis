@@ -86,7 +86,7 @@ if [ "${SKIPTEST}" -eq 0 ]; then
 
     if [ $min_compare_CVE_2022_0847 -eq 2 ] && [ $max_compare_CVE_2022_0847 -eq 1 ]; then
         Display --indent 4 --text "- CVE-2022-0847" --result WARNING --color RED
-        LogText "Result: The system is vulnerable to Dirty Pipe (CVE-2022-0847)"
+        LogText "Result: The system is vulnerable to Dirty Pipe"
         ReportWarning "CVE-2022-0847" "The system is vulnerable to Dirty Pipe"
     else
         Display --indent 4 --text "- CVE-2022-0847" --result OK --color GREEN
