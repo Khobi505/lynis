@@ -18,15 +18,13 @@
 #
 #################################################################################
 #
-# Category: Privily
+# Category: Privilynis
 #
 #################################################################################
 #
     InsertSection "PRIVLYINIS: Privilege Escalation CVE Detection"
 #
 #################################################################################
-#
-# Initial Checks for CVEs
 
 # Function to check if required commands are available
 command_exists() {
@@ -63,7 +61,7 @@ Register --test-no CVE-2022-0847 --weight L --network NO --category security --d
 if [ "${SKIPTEST}" -eq 0 ]; then
      # Vulnerable kernel version range for CVE-2022-0847 (Dirty Pipe)
     vulnerable_min_version_CVE_2022_0847="5.8.0"
-    vulnerable_max_version_CVE_2022_0847="5.16.10"
+    vulnerable_max_version_CVE_2022_0847="5.16.11"
 
     # Compare function for version strings
     compare_versions() {
@@ -89,10 +87,10 @@ if [ "${SKIPTEST}" -eq 0 ]; then
     if [ $min_compare_CVE_2022_0847 -eq 2 ] && [ $max_compare_CVE_2022_0847 -eq 1 ]; then
         Display --indent 4 --text "- CVE-2022-0847" --result WARNING --color RED
         LogText "Result: The system is vulnerable to Dirty Pipe (CVE-2022-0847)"
-        ReportWarning "CVE-2022-0847" "The system is vulnerable to Dirty Pipe (CVE-2022-0847)"
+        ReportWarning "CVE-2022-0847" "The system is vulnerable to Dirty Pipe"
     else
         Display --indent 4 --text "- CVE-2022-0847" --result OK --color GREEN
-        LogText "Result: The system is not vulnerable to Dirty Pipe (CVE-2022-0847)"
+        LogText "Result: The system is not vulnerable to Dirty Pipe"
     fi
 fi
 
@@ -104,8 +102,8 @@ fi
 Register --test-no CVE-2023-3269 --weight L --network NO --category security --description "Check for StackRot vulnerability (CVE-2023-3269)"
 if [ "${SKIPTEST}" -eq 0 ]; then
     # Check for StackRot vulnerability
-    vulnerable_min_version_cve_2023_3269="5.10.0"
-    vulnerable_max_version_cve_2023_3269="5.10.12"
+    vulnerable_min_version_cve_2023_3269="6.1.0"
+    vulnerable_max_version_cve_2023_3269="6.4.0"
 
     compare_versions() {
         ver1=$(printf "%03d%03d%03d" $(echo "$1" | cut -d '-' -f1 | tr '.' ' '))
@@ -129,11 +127,11 @@ if [ "${SKIPTEST}" -eq 0 ]; then
 
     if [ $min_compare_cve_2023_3269 -eq 2 ] && [ $max_compare_cve_2023_3269 -eq 1 ]; then
         Display --indent 4 --text "- CVE-2023-3269" --result WARNING --color RED
-        LogText "Result: The system is vulnerable to StackRot vulnerability (CVE-2023-3269)"
-        ReportWarning "CVE-2023-3269" "The system is vulnerable to StackRot vulnerability (CVE-2023-3269)"
+        LogText "Result: The system is vulnerable to StackRot vulnerability"
+        ReportWarning "CVE-2023-3269" "The system is vulnerable to StackRot vulnerability"
     else
         Display --indent 4 --text "- CVE-2023-3269" --result OK --color GREEN
-        LogText "Result: The system is not vulnerable to StackRot vulnerability (CVE-2023-3269)"
+        LogText "Result: The system is not vulnerable to StackRot vulnerability"
     fi
 fi
 
@@ -142,31 +140,30 @@ fi
 # Test        : CVE-2023-4911
 # Description : Check for Looney Tunables vulnerability (CVE-2023-4911)
 
-Register --test-no CVE-2023-4911 --weight L --network NO --category security --description "Check for Looney Tunables vulnerability (CVE-2023-4911)"
+Register --test-no CVE-2023-4911 --weight H --network NO --category security --description "Check for Looney Tunables vulnerability (CVE-2023-4911)"
 if [ "${SKIPTEST}" -eq 0 ]; then
     # Check for Looney Tunables vulnerability
     vulnerable_min_glibc_cve_2023_4911="2.34"
     vulnerable_max_glibc_cve_2023_4911="2.37"
     
     compare_versions() {
-        ver1=$(printf "%03d%03d%03d" $(echo "$1" | cut -d '-' -f1 | tr '.' ' '))
-        ver2=$(printf "%03d%03d%03d" $(echo "$2" | cut -d '-' -f1 | tr '.' ' '))
+    ver1=$(printf "%03d%03d%03d" $(echo "$1" | cut -d '-' -f1 | tr '.' ' '))
+    ver2=$(printf "%03d%03d%03d" $(echo "$2" | cut -d '-' -f1 | tr '.' ' '))
 
-        if [ "$ver1" -lt "$ver2" ]; then
-            return 1   # version1 < version2
-        elif [ "$ver1" -gt "$ver2" ]; then
-            return 2   # version1 > version2
-        else
-            return 0   # version1 == version2
-        fi
-    }
+    if [ "$ver1" -lt "$ver2" ]; then
+        return 1   # version1 < version2
+    elif [ "$ver1" -gt "$ver2" ]; then
+        return 2   # version1 > version2
+    else
+        return 0   # version1 == version2
+    fi
+}
 
-    
     # Check if the installed glibc version is vulnerable
-    compare_versions "$kernel_version" "$vulnerable_min_glibc_cve_2023_4911"
+    compare_versions "$glibc_version" "$vulnerable_min_glibc_cve_2023_4911"
     min_compare_cve_2023_4911=$?
 
-    compare_versions "$kernel_version" "$vulnerable_max_glibc_cve_2023_4911"
+    compare_versions "$glibc_version" "$vulnerable_max_glibc_cve_2023_4911"
     max_compare_cve_2023_4911=$?
 
     if [ $min_compare_cve_2023_4911 -eq 2 ] && [ $max_compare_cve_2023_4911 -eq 1 ]; then
