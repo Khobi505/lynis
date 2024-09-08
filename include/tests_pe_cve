@@ -169,7 +169,7 @@ if [ "${SKIPTEST}" -eq 0 ]; then
     if [ $min_compare_cve_2023_4911 -eq 2 ] && [ $max_compare_cve_2023_4911 -eq 1 ]; then
         Display --indent 4 --text "- CVE-2023-4911" --result WARNING --color RED
         LogText "Result: The system is vulnerable to Looney Tunables vulnerability"
-        ReportWarning "CVE-2023-3269" "The system is vulnerable to Looney Tunables vulnerability"
+        ReportWarning "CVE-2023-4911" "The system is vulnerable to Looney Tunables vulnerability"
     else
         Display --indent 4 --text "- CVE-2023-4911" --result OK --color GREEN
         LogText "Result: The system is not vulnerable to Looney Tunables vulnerability"
