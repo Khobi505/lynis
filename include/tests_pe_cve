@@ -60,8 +60,8 @@ check_initial_conditions
 Register --test-no CVE-2022-0847 --weight L --network NO --category security --description "Check for Dirty Pipe vulnerability (CVE-2022-0847)"
 if [ "${SKIPTEST}" -eq 0 ]; then
      # Vulnerable kernel version range for CVE-2022-0847 (Dirty Pipe)
-    vulnerable_min_version_CVE_2022_0847="5.8.0"
-    vulnerable_max_version_CVE_2022_0847="5.16.11"
+    vulnerable_min_version_CVE_2022_0847="5.8.1"
+    vulnerable_max_version_CVE_2022_0847="5.16.12"
 
     # Compare function for version strings
     compare_versions() {
@@ -143,8 +143,8 @@ fi
 Register --test-no CVE-2023-4911 --weight H --network NO --category security --description "Check for Looney Tunables vulnerability (CVE-2023-4911)"
 if [ "${SKIPTEST}" -eq 0 ]; then
     # Check for Looney Tunables vulnerability
-    vulnerable_min_glibc_cve_2023_4911="2.34"
-    vulnerable_max_glibc_cve_2023_4911="2.37"
+    vulnerable_min_glibc_cve_2023_4911="2.33"
+    vulnerable_max_glibc_cve_2023_4911="2.38"
     
     compare_versions() {
     ver1=$(printf "%03d%03d%03d" $(echo "$1" | cut -d '-' -f1 | tr '.' ' '))
