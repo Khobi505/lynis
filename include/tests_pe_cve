@@ -60,7 +60,7 @@ check_initial_conditions
 Register --test-no CVE-2022-0847 --weight L --network NO --category security --description "Check for Dirty Pipe vulnerability (CVE-2022-0847)"
 if [ "${SKIPTEST}" -eq 0 ]; then
      # Vulnerable kernel version range for CVE-2022-0847 (Dirty Pipe)
-    vulnerable_min_version_CVE_2022_0847="5.8.1"
+    vulnerable_min_version_CVE_2022_0847="5.7.19"
     vulnerable_max_version_CVE_2022_0847="5.16.12"
 
     # Compare function for version strings
@@ -102,8 +102,8 @@ fi
 Register --test-no CVE-2023-3269 --weight L --network NO --category security --description "Check for StackRot vulnerability (CVE-2023-3269)"
 if [ "${SKIPTEST}" -eq 0 ]; then
     # Check for StackRot vulnerability
-    vulnerable_min_version_cve_2023_3269="6.1.0"
-    vulnerable_max_version_cve_2023_3269="6.4.0"
+    vulnerable_min_version_cve_2023_3269="6.0.0"
+    vulnerable_max_version_cve_2023_3269="6.5.0"
 
     compare_versions() {
         ver1=$(printf "%03d%03d%03d" $(echo "$1" | cut -d '-' -f1 | tr '.' ' '))
