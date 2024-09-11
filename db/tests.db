@@ -448,5 +448,7 @@ USB-2000:test:security:storage:Linux:Check USB authorizations:
 USB-3000:test:security:storage:Linux:Check for presence of USBGuard:
 CVE-2022-0847:test:security:pe_cve::Check for privilege escalation vulnerability Dirty Pipe:
 CVE-2023-4911:test:security:pe_cve::Check for Looney Tunables vulnerability (CVE-2023-4911):
-CVE-2023-3269:test:security:pe_cve::Check for StackRot vulnerability (CVE-2023-3269)
+CVE-2023-3269:test:security:pe_cve::Check for StackRot vulnerability (CVE-2023-3269):
+SLP-0001:test:security:pe_selinux_policy::Control File Access for Specific Daemons (SELinux Policy):
+SLP-0002:test:security:pe_selinux_policy::Restrict Network Access Based on Process Type (SELinux Policy):
 # EOF
