@@ -1,5 +1,4 @@
 #!/bin/sh
-
 #################################################################################
 #
 #   Lynis
@@ -18,7 +17,7 @@
 #
 #################################################################################
 #
-# Category: Privilynis
+# Privilynis
 #
 #################################################################################
 #
@@ -30,7 +29,6 @@
 command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
-
 # Initial checks for kernel and glibc versions
 check_initial_conditions() {
     # Check if 'uname' and 'ldd' commands exist
